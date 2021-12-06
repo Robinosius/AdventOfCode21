@@ -10,7 +10,7 @@ namespace AdventOfCode21
     {
         static void Main(string[] args)
         {
-            Day5_2();
+            Day6_2();
         }
 
         static IEnumerable<string> ReadFile(string name)
@@ -243,5 +243,21 @@ namespace AdventOfCode21
             }
             Console.WriteLine(count);
         }
-    }
+
+        static void Day6_1()
+        {
+            var input = ReadFile("day6.txt").First();
+            List<int> initialPopulation = input.Split(",").Select(val => Int32.Parse(val)).ToList();
+            var population = new LanternfishPopulation(initialPopulation);
+            Console.WriteLine(population.SizeAfterNSteps(256));
+        }
+
+        static void Day6_2()
+        {
+            var input = ReadFile("day6.txt").First();
+            List<int> initialPopulation = input.Split(",").Select(val => Int32.Parse(val)).ToList();
+            var population = new LanternfishWorldDomination(initialPopulation);
+            Console.WriteLine(population.SizeAfterNSteps(256));
+        }
+    }    
 }
