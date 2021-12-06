@@ -72,6 +72,45 @@ namespace AdventOfCode21
     }
 
 
+    class LanternfishWorldDominationLight
+    {
+        int[] population = new int[9];
+
+        public LanternfishWorldDominationLight(List<int> initial)
+        {
+            foreach (var fish in initial)
+            {
+                population[fish]++;
+            }
+        }
+
+        public int SizeAfterNSteps(int steps)
+        {
+            for (int j = 0; j < steps; j++)
+            {
+                Step();
+            }
+            int size = 0;
+            for (int i = 0; i < population.Length; i++)
+            {
+                size += population[i];
+            }
+            return size;
+        }
+
+        public void Step()
+        {
+            int newFish = population[0];
+            for (int i = 0; i < population.Length - 1; i++)
+            {
+                population[i] = population[i + 1];
+            }
+            population[6] += newFish;
+            population[8] = newFish;
+        }
+    }
+
+
     class LanternfishPopulation
     {
         List<Lanternfish> population;
