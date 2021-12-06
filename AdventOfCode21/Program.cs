@@ -10,7 +10,7 @@ namespace AdventOfCode21
     {
         static void Main(string[] args)
         {
-            Day3_2();
+            Day5_2();
         }
 
         static IEnumerable<string> ReadFile(string name)
@@ -158,6 +158,90 @@ namespace AdventOfCode21
                 if (oxInput[0][j] == '1') { oxy += Math.Pow(2, (double)(oxInput[0].Count() - j - 1)); }
             }
             Console.WriteLine($"Oxygen Generator Rating: {oxy}, CO2 Scrubber Rating: {carbon}, Life Support Rating: {oxy * carbon}");
-        }         
+        }
+
+        static void Day4()
+        {
+            var input = ReadFile("day4.txt").ToList();
+            var numbers = input[0].Split(",").ToList();
+            input.RemoveRange(0, 2);
+            var game = new Bingo(numbers, input);
+            //game.GetFirstWinner();
+            game.GetLastWinner();
+        }
+
+        static void Day5_1()
+        {
+            var input = ReadFile("day5.txt").ToList();
+            int[,] grid = new int[1000, 1000];
+            foreach (var command in input)
+            {
+                var split = command.Split(" -> ");
+                int[] p1 = { Int32.Parse(split[0].Split(",")[0]), Int32.Parse(split[0].Split(",")[1]) };
+                int[] p2 = { Int32.Parse(split[1].Split(",")[0]), Int32.Parse(split[1].Split(",")[1]) };
+                int[] vector = { Math.Sign(p2[0] - p1[0]), Math.Sign(p2[1] - p1[1]) };
+                if(vector[0] != 0 ^ vector[1] != 0)
+                {
+                    while (!Enumerable.SequenceEqual(p1, p2))
+                    {
+                        grid[p1[0], p1[1]]++;
+                        p1[0] += vector[0];
+                        p1[1] += vector[1];
+                    }
+                    grid[p2[0], p2[1]]++;
+                }                
+            }
+
+            int count = 0;
+
+            for(int i = 0; i < 1000;  i++)
+            {
+                for(int j = 0; j < 1000; j++)
+                {
+                    if(grid[i,j] >= 2)
+                    {
+                        count++;
+                    }
+                }
+            }
+            Console.WriteLine(count);
+        }
+
+        static void Day5_2()
+        {
+            var input = ReadFile("day5.txt").ToList();
+            int[,] grid = new int[1000, 1000];
+            foreach (var command in input)
+            {
+                var split = command.Split(" -> ");
+                int[] p1 = { Int32.Parse(split[0].Split(",")[0]), Int32.Parse(split[0].Split(",")[1]) };
+                int[] p2 = { Int32.Parse(split[1].Split(",")[0]), Int32.Parse(split[1].Split(",")[1]) };
+                int[] vector = { Math.Sign(p2[0] - p1[0]), Math.Sign(p2[1] - p1[1]) };
+                if ((vector[0] != 0 ^ vector[1] != 0) || Math.Abs(vector[0]) == Math.Abs(vector[1]))
+                {
+                    while (!Enumerable.SequenceEqual(p1, p2))
+                    {
+                        grid[p1[0], p1[1]]++;
+                        p1[0] += vector[0];
+                        p1[1] += vector[1];
+                    }
+                    grid[p2[0], p2[1]]++;
+                }
+            }
+
+            int count = 0;
+
+            for (int i = 0; i < 1000; i++)
+            {
+                for (int j = 0; j < 1000; j++)
+                {
+                    if (grid[i, j] >= 2)
+                    {
+                        count++;
+                    }
+                }
+            }
+            Console.WriteLine(count);
+        }
     }
 }
