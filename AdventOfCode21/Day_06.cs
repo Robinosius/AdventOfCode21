@@ -2,10 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
+using AoCHelper;
 
 namespace AdventOfCode21
 {
+    class Day_06 : BaseDay
+    {
+        string input;
+
+        public Day_06()
+        {
+            input = File.ReadAllLines(InputFilePath).First();
+        }
+
+        public override ValueTask<string> Solve_1()
+        {
+            List<int> initialPopulation = input.Split(",").Select(val => Int32.Parse(val)).ToList();
+            //var population = new LanternfishPopulation(initialPopulation);
+            var population = new LanternfishWorldDomination(initialPopulation);
+            return new(population.SizeAfterNSteps(80).ToString());
+        }
+
+        public override ValueTask<string> Solve_2()
+        {
+            List<int> initialPopulation = input.Split(",").Select(val => Int32.Parse(val)).ToList();
+            var population = new LanternfishWorldDomination(initialPopulation);
+            return new(population.SizeAfterNSteps(256).ToString());
+        }
+    }
+
     class LanternfishWorldDomination
     {
         long[] population = new long[9];
@@ -20,12 +47,12 @@ namespace AdventOfCode21
 
         public long SizeAfterNSteps(int steps)
         {
-            for(int j = 0; j < steps; j++)
+            for (int j = 0; j < steps; j++)
             {
                 Step();
             }
             long size = 0;
-            for(int i = 0; i < population.Length; i++)
+            for (int i = 0; i < population.Length; i++)
             {
                 size += population[i];
             }
@@ -35,7 +62,7 @@ namespace AdventOfCode21
         public void Step()
         {
             long newFish = population[0];
-            for(int i = 0; i < population.Length - 1; i++)
+            for (int i = 0; i < population.Length - 1; i++)
             {
                 population[i] = population[i + 1];
             }
@@ -52,7 +79,7 @@ namespace AdventOfCode21
         public LanternfishPopulation(List<int> initial)
         {
             this.population = new();
-            foreach(var fish in initial)
+            foreach (var fish in initial)
             {
                 population.Add(new Lanternfish(fish));
             }
@@ -60,7 +87,7 @@ namespace AdventOfCode21
 
         public int SizeAfterNSteps(int steps)
         {
-            for(int i = 0; i < steps; i++)
+            for (int i = 0; i < steps; i++)
             {
                 Step();
             }
@@ -70,7 +97,7 @@ namespace AdventOfCode21
         public void Step()
         {
             var initialSize = population.Count;
-            for(int i = 0; i < initialSize; i++)
+            for (int i = 0; i < initialSize; i++)
             {
                 var newFish = population[i].Age();
                 if (newFish)
@@ -92,7 +119,7 @@ namespace AdventOfCode21
 
         public bool Age()
         {
-            if(counter == 0)
+            if (counter == 0)
             {
                 counter = 6;
                 return true;

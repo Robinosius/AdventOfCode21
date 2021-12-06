@@ -1,11 +1,39 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AoCHelper;
 
 namespace AdventOfCode21
 {
+    class Day_04 : BaseDay
+    {
+        private List<string> input;
+        private List<string> numbers;
+
+        public Day_04()
+        {
+            input = File.ReadAllLines(InputFilePath).ToList();
+            numbers = new List<string>(input[0].Split(",").ToList());
+            input.RemoveRange(0, 2);
+        }
+
+        public override ValueTask<string> Solve_1()
+        {
+            var game = new Bingo(numbers, input);
+            return new(game.GetFirstWinner());
+        }
+
+        public override ValueTask<string> Solve_2()
+        {
+            var game = new Bingo(numbers, input);
+            return new(game.GetLastWinner());
+        }
+    }
+
+
     class Bingo
     {
         private List<Board> boards;
@@ -17,9 +45,9 @@ namespace AdventOfCode21
             this.boards = new();
 
             List<List<GridItem>> boardItems = new();
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
-                if(line.Equals(""))
+                if (line.Equals(""))
                 {
                     boards.Add(new Board(boardItems));
                     boardItems.Clear();
@@ -29,38 +57,37 @@ namespace AdventOfCode21
                 {
                     var split = line.Trim().Split(' ').ToList().Where(val => val != "").Select(val => new GridItem(Int32.Parse(val))).ToList();
                     boardItems.Add(split);
-                }                
+                }
             }
             boards.Add(new Board(boardItems));
         }
 
-        public void GetFirstWinner()
+        public string GetFirstWinner()
         {
-            foreach(var number in numbers)
+            foreach (var number in numbers)
             {
-                Console.WriteLine(number);
                 foreach (Board board in boards)
-                {                    
+                {
                     board.Mark(number);
                     if (board.CheckGrid())
                     {
-                        Console.WriteLine(board.GetScore(number));
+                        return(board.GetScore(number).ToString());
                         Console.ReadLine();
                     }
                 }
             }
+            return null;
         }
 
-        public void GetLastWinner()
+        public string GetLastWinner()
         {
             Board lastWinner = null;
             int lastWinningNumber = -1;
             List<Board> winners = new();
-            foreach(var number in numbers)
+            foreach (var number in numbers)
             {
-                Console.WriteLine(number);
                 foreach (Board board in boards)
-                {                    
+                {
                     board.Mark(number);
                     if (board.CheckGrid())
                     {
@@ -72,7 +99,7 @@ namespace AdventOfCode21
 
                 }
             }
-            Console.WriteLine(lastWinner.GetScore(lastWinningNumber));
+            return(lastWinner.GetScore(lastWinningNumber).ToString());
         }
     }
 
@@ -88,13 +115,12 @@ namespace AdventOfCode21
 
         public void Mark(int number)
         {
-            foreach(var row in this.rows)
+            foreach (var row in this.rows)
             {
-                foreach(GridItem item in row)
+                foreach (GridItem item in row)
                 {
-                    if(item.Value == number)
+                    if (item.Value == number)
                     {
-                        Console.WriteLine($"Marked {number}");
                         item.IsMarked = true;
                     }
                 }
@@ -111,7 +137,7 @@ namespace AdventOfCode21
             foreach (var row in rows)
             {
                 var marked = true;
-                foreach(var item in row)
+                foreach (var item in row)
                 {
                     if (!item.IsMarked)
                     {
@@ -128,10 +154,10 @@ namespace AdventOfCode21
 
         public bool CheckColumns()
         {
-            for(int i = 0; i < rows[0].Count; i++)
+            for (int i = 0; i < rows[0].Count; i++)
             {
                 var marked = true;
-                for(int j = 0; j < rows.Count; j++)
+                for (int j = 0; j < rows.Count; j++)
                 {
                     if (!rows[j][i].IsMarked)
                     {
@@ -149,9 +175,9 @@ namespace AdventOfCode21
         public int GetScore(int winningNumber)
         {
             var sum = 0;
-            foreach(var row in rows)
+            foreach (var row in rows)
             {
-                foreach(var item in row)
+                foreach (var item in row)
                 {
                     if (!item.IsMarked)
                     {
