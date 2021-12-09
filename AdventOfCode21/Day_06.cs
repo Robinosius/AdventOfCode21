@@ -21,7 +21,7 @@ namespace AdventOfCode21
         {
             List<int> initialPopulation = input.Split(",").Select(val => Int32.Parse(val)).ToList();
             //var population = new LanternfishPopulation(initialPopulation);
-            var population = new LanternfishWorldDomination(initialPopulation);
+            var population = new LanternfishWorldDominationLight(initialPopulation);
             return new(population.SizeAfterNSteps(80).ToString());
         }
 

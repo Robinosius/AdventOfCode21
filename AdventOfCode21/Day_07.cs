@@ -21,13 +21,16 @@ namespace AdventOfCode21
         {
             var positions = input.Split(",").Select(var => Int32.Parse(var)).ToList();
             long distance = long.MaxValue;
-            for(int i = positions.Min(); i < positions.Max(); i++)
-            {
-                long newDistance = 0;
+            long newDistance = 0;
+            for (int i = positions.Min(); i < positions.Max(); i++)
+            {                
                 positions.ForEach(val => newDistance += Math.Abs(val - i));
                 if(newDistance < distance)
                 {
                     distance = newDistance;
+                } else if (newDistance > distance)
+                {
+                    break;
                 }
             }
             return new(distance.ToString());
@@ -37,13 +40,17 @@ namespace AdventOfCode21
         {
             var positions = input.Split(",").Select(var => Int32.Parse(var)).ToList();
             long distance = long.MaxValue;
+            long newDistance = 0;
             for (int i = positions.Min(); i < positions.Max(); i++)
-            {
-                long newDistance = 0;
+            {                
                 positions.ForEach(val => newDistance += GetCrabConsumption(val, i));
                 if (newDistance < distance)
                 {
                     distance = newDistance;
+                }
+                else
+                {
+                    break;
                 }
             }
             return new(distance.ToString());

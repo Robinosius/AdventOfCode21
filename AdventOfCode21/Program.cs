@@ -11,8 +11,8 @@ namespace AdventOfCode21
     {
         static void Main(string[] args)
         {
-            //Solver.SolveAll();
-            Solver.SolveLast();
+            Solver.SolveAll();
+            //Solver.SolveLast();
         }
     }    
 }
