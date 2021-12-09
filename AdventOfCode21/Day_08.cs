@@ -19,12 +19,19 @@ namespace AdventOfCode21
 
         public override ValueTask<string> Solve_1()
         {
-            throw new NotImplementedException();
+            int count = 0;
+            int[] counts = { 2, 3, 4, 7 };
+            foreach(string line in input)
+            {
+                var split = line.Split(" | ")[1].Split(" ");
+                count += split.Where(var => counts.Contains(var.Length)).Count();
+            }
+            return new(count.ToString());
         }
 
         public override ValueTask<string> Solve_2()
         {
-            throw new NotImplementedException();
+            return new("");
         }
     }
 }
