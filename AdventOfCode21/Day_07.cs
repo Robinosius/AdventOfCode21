@@ -41,9 +41,18 @@ namespace AdventOfCode21
             var positions = input.Split(",").Select(var => Int32.Parse(var)).ToList();
             long distance = long.MaxValue;
             long newDistance = 0;
+            long[] consumptions = new long[positions.Max() - positions.Min() + 1];
+            consumptions[0] = 0;
+            consumptions[1] = 1;
+            for(int i = 2; i < consumptions.Length; i++)
+            {
+                consumptions[i] = consumptions[i - 1] + i;
+            }
+
             for (int i = positions.Min(); i < positions.Max(); i++)
-            {                
-                positions.ForEach(val => newDistance += GetCrabConsumption(val, i));
+            {
+                newDistance = 0;
+                positions.ForEach(val => newDistance += consumptions[Math.Abs(val - i)]);
                 if (newDistance < distance)
                 {
                     distance = newDistance;
@@ -54,17 +63,6 @@ namespace AdventOfCode21
                 }
             }
             return new(distance.ToString());
-        }
-
-        public long GetCrabConsumption(int crabPos, int meetingPos)
-        {
-            int distance = Math.Abs(crabPos - meetingPos);
-            long fuelConsumption = 0;
-            for(int i = 1; i <= distance; i++)
-            {
-                fuelConsumption += i;
-            }
-            return fuelConsumption;
-        }
+        }        
     }
 }
