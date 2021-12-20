@@ -39,7 +39,27 @@ namespace AdventOfCode21
 
         public override ValueTask<string> Solve_2()
         {
-            throw new NotImplementedException();
+            int stepsUntilSynced = 0;
+            int[,] energyLevels = new int[input.Count, input[0].Count()];
+            for (int i = 0; i < input.Count; i++)
+            {
+                for (int j = 0; j < input[0].Count(); j++)
+                {
+                    energyLevels[i, j] = Int32.Parse(input[i][j].ToString());
+                }
+            }
+            // perform steps
+            while(true)
+            {
+                stepsUntilSynced++;
+                IncreaseEnergyLevel(energyLevels);
+                var flashes= Flash(energyLevels);
+                if(flashes == (energyLevels.GetLength(0) * energyLevels.GetLength(1)))
+                {
+                    break;
+                }
+            }
+            return new(stepsUntilSynced.ToString());
         }
 
         public void IncreaseEnergyLevel(int[,] energyLevels)
