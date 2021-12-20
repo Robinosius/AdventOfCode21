@@ -20,10 +20,12 @@ namespace AdventOfCode21
         public override ValueTask<string> Solve_1()
         {
             var positions = input.Split(",").Select(var => Int32.Parse(var)).ToList();
-            long distance = long.MaxValue;
-            long newDistance = 0;
+            int distance = int.MaxValue;
+            int newDistance = 0;            
+
             for (int i = positions.Min(); i < positions.Max(); i++)
-            {                
+            {
+                newDistance = 0;
                 positions.ForEach(val => newDistance += Math.Abs(val - i));
                 if(newDistance < distance)
                 {
@@ -39,9 +41,9 @@ namespace AdventOfCode21
         public override ValueTask<string> Solve_2()
         {
             var positions = input.Split(",").Select(var => Int32.Parse(var)).ToList();
-            long distance = long.MaxValue;
-            long newDistance = 0;
-            long[] consumptions = new long[positions.Max() - positions.Min() + 1];
+            int distance = int.MaxValue;
+            int newDistance = 0;
+            int[] consumptions = new int[positions.Max() - positions.Min() + 1];
             consumptions[0] = 0;
             consumptions[1] = 1;
             for(int i = 2; i < consumptions.Length; i++)
