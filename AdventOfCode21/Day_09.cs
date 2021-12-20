@@ -70,7 +70,7 @@ namespace AdventOfCode21
                     neighbors.Add(j < heightMap.GetLength(1) - 1 ? heightMap[i, j + 1] : 10); //right
                     if (heightMap[i, j] < neighbors.Min())
                     {
-                        var basin = GetBasin(heightMap, new int[] { i, j }, new List<int[]> { new int[] { i, j } }).ToList();
+                        var basin = GetBasin(heightMap, new int[] { i, j }, new List<int[]> { new int[] { i, j } }).Distinct(new SequenceEqualityComparer<int[]>()).ToList();
                         basinSizes.Add(basin.Count);
                     }
                 }
@@ -82,19 +82,19 @@ namespace AdventOfCode21
         public List<int[]> GetBasin(int[,] heightMap, int[] point, List<int[]> basin)
         {
             if (point[0] == -1 || heightMap[point[0], point[1]] == 9 || basin.Contains(point)){
-                return basin.Distinct(new SequenceEqualityComparer<int[]>()).ToList();
+                return basin.Distinct().ToList();
             }
-            basin.Add(point);
+            basin.Add(point);            
             // get all neighboring bassin members, invalid = {-1, -1}
             int[] t = point[0] > 0 && heightMap[point[0] - 1, point[1]] > heightMap[point[0], point[1]] ? new int[] { point[0] - 1, point[1] } : new int[]{ -1, -1}; // top
             int[] b = point[0] < heightMap.GetLength(1) - 1 && heightMap[point[0] + 1, point[1]] > heightMap[point[0], point[1]] ? new int[] { point[0] + 1, point[1] } : new int[] { -1, -1 }; // bottom
             int[] l = point[1] > 0 && heightMap[point[0], point[1] - 1] > heightMap[point[0], point[1]] ? new int[] { point[0], point[1] - 1 } : new int[] { -1, -1 }; // left
             int[] r = point[1] < heightMap.GetLength(1) - 1 && heightMap[point[0], point[1] + 1] > heightMap[point[0], point[1]] ? new int[] { point[0], point[1] + 1 } : new int[] { -1, -1 }; //right
-            
+            heightMap[point[0], point[1]] = 9;
             return GetBasin(heightMap, t, basin)
                 .Concat(GetBasin(heightMap, b, basin))
                 .Concat(GetBasin(heightMap, l, basin))
-                .Concat(GetBasin(heightMap, r, basin)).Distinct(new SequenceEqualityComparer<int[]>()).ToList();
+                .Concat(GetBasin(heightMap, r, basin)).Distinct().ToList();
         }
 
         class SequenceEqualityComparer<T> : IEqualityComparer<int[]>
