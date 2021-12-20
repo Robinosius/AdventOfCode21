@@ -90,7 +90,7 @@ namespace AdventOfCode21
             int[] b = point[0] < heightMap.GetLength(1) - 1 && heightMap[point[0] + 1, point[1]] > heightMap[point[0], point[1]] ? new int[] { point[0] + 1, point[1] } : new int[] { -1, -1 }; // bottom
             int[] l = point[1] > 0 && heightMap[point[0], point[1] - 1] > heightMap[point[0], point[1]] ? new int[] { point[0], point[1] - 1 } : new int[] { -1, -1 }; // left
             int[] r = point[1] < heightMap.GetLength(1) - 1 && heightMap[point[0], point[1] + 1] > heightMap[point[0], point[1]] ? new int[] { point[0], point[1] + 1 } : new int[] { -1, -1 }; //right
-            heightMap[point[0], point[1]] = 9;
+            heightMap[point[0], point[1]] = 9; // point will not be revisited, this line increases performance significantly
             return GetBasin(heightMap, t, basin)
                 .Concat(GetBasin(heightMap, b, basin))
                 .Concat(GetBasin(heightMap, l, basin))
