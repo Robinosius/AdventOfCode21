@@ -53,7 +53,53 @@ namespace AdventOfCode21
 
         public override ValueTask<string> Solve_2()
         {
-            return new("");
+            List<long> scores = new();
+            List<char> openers = new List<char> { '(', '[', '{', '<' };
+            List<char> closers = new List<char> { ')', ']', '}', '>' };
+            Stack<char> chunkStack = new();
+            foreach (string line in input.ToList()) // remove corrupted lines
+            {
+                foreach (char c in line)
+                {
+                    if (openers.Contains(c))
+                    {
+                        chunkStack.Push(c);
+                    }
+                    else if (closers.IndexOf(c) == openers.IndexOf(chunkStack.Peek()))
+                    {
+                        chunkStack.Pop();
+                    }
+                    else
+                    {
+                        input.Remove(line);
+                        break;
+                    }
+                }
+            }
+            chunkStack.Clear();
+            foreach (string line in input)
+            {
+                foreach (char c in line) // get stack of "unclosed openers"
+                {
+                    if (openers.Contains(c))
+                    {
+                        chunkStack.Push(c);
+                    }
+                    else if (closers.IndexOf(c) == openers.IndexOf(chunkStack.Peek()))
+                    {
+                        chunkStack.Pop();
+                    }
+                }
+                long score = 0;
+                while (chunkStack.Count > 0)
+                {
+                    score *= 5;
+                    score += openers.IndexOf(chunkStack.Pop()) + 1;
+                }
+                scores.Add(score);
+            }
+            scores.Sort();
+            return new(scores[scores.Count() / 2].ToString());
         }
     }
 }
