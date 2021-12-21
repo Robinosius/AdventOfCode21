@@ -38,12 +38,12 @@ namespace AdventOfCode21
             }
             Stack<Cave> path = new();
             path.Push(caveSystem["start"]);
-            var paths = new List<Stack<Cave>>();
-            FindPaths(path, paths, caveSystem["end"]) ;            
-            return new(paths.Count().ToString());
+            int pathCount = 0;
+            FindPaths(path, ref pathCount, caveSystem["end"]) ;            
+            return new(pathCount.ToString());
         }
 
-        public void FindPaths(Stack<Cave> path, List<Stack<Cave>> finishedPaths, Cave end)
+        public void FindPaths(Stack<Cave> path, ref int pathCount, Cave end)
         {
             foreach(var cave in path.Peek().ConnectedCaves)
             {
@@ -53,11 +53,12 @@ namespace AdventOfCode21
                 }
                 if(cave.Name == "end")
                 {
-                    finishedPaths.Add(path);
+                    pathCount++;
+                    continue;
                 }
                 var newPath = new Stack<Cave>(path);
                 newPath.Push(cave);
-                FindPaths(newPath, finishedPaths, end);
+                FindPaths(newPath, ref pathCount, end);
             }
         }
 
